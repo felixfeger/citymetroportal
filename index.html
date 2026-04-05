@@ -802,10 +802,9 @@ function prevScreen(){const s=buildScreenList();currentScreen=(currentScreen-1+s
 function nextScreen(){const s=buildScreenList();currentScreen=(currentScreen+1)%s.length;renderDisplayPreview();}
 
 function renderArrivalsScreen(){
-  // For each line, pick the train with the lowest ETA to its next station
   const rows=[];
   ['A','E','K'].forEach(rk=>{
-    let best=null, bestEta=Infinity, bestDest='Terminus';
+    let best=null, bestEta=Infinity, bestDest='', bestAtStation=false;
     state.trains.forEach(t=>{
       const r=['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number);
       if(r!==rk) return;
@@ -813,30 +812,58 @@ function renderArrivalsScreen(){
       const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
       const idx2=track.indexOf(t.location);
       if(idx2===-1) return;
-      // Find next station ahead
+
+      // Check if train is currently AT a station block
+      const atStation=!!ROUTES[rk].stations[t.location];
+      if(atStation){
+        // At station — ETA 0, destination is this station
+        const stnCode=ROUTES[rk].stations[t.location];
+        const stnName=STATION_NAMES[stnCode]||stnCode;
+        if(0<bestEta){bestEta=0;best=t;bestDest=stnName;bestAtStation=true;}
+        return;
+      }
+
+      // Not at station — find next station ahead
       const nextStnBlock=track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]);
       if(!nextStnBlock) return;
-      const blocksAway=track.indexOf(nextStnBlock)-(idx2);
+      const blocksAway=track.indexOf(nextStnBlock)-idx2;
       const etaMin=Math.round(blocksAway*30/60);
       if(etaMin<bestEta){
-        bestEta=etaMin;
-        best=t;
+        bestEta=etaMin;best=t;
         bestDest=STATION_NAMES[ROUTES[rk].stations[nextStnBlock]]||ROUTES[rk].stations[nextStnBlock];
+        bestAtStation=false;
       }
     });
     if(best){
-      rows.push({label:LINE_LABELS[rk],color:LINE_COLORS[rk],dest:bestDest,etaMin:bestEta,status:'On Time',platform:LINE_PLATFORM[rk]});
+      // Track number = line number (1=A, 2=E, 3=K)
+      const trackNum={A:'Track 1',E:'Track 2',K:'Track 3'}[rk];
+      rows.push({
+        label:LINE_LABELS[rk],color:LINE_COLORS[rk],
+        dest:bestDest,etaMin:bestEta,
+        atStation:bestAtStation,
+        status:bestAtStation?'At Platform':'On Time',
+        platform:trackNum
+      });
     }
   });
 
-  // Add true operator trains
+  // True operator trains
   const trueOps=state.opTrains.filter(o=>!getRoute(o.train_number));
   trueOps.forEach(t=>{
-    const pts=(t.location||'').split(' -- ');
-    rows.push({label:t.operator||t.train_number||'Guest',color:'#a07fff',dest:t.route||'--',etaMin:parseInt(t.direction)||99,status:t.coupled_with||'On Time',platform:pts[0]||'--'});
+    // location field is "Platform X -- Track Y" — extract just track number
+    const parts=(t.location||'').split('--');
+    const track=(parts[1]||parts[0]||'').trim();
+    const etaMin=parseInt(t.direction)||99;
+    rows.push({
+      label:t.operator||t.train_number||'Guest',color:'#a07fff',
+      dest:t.route||'--',etaMin,
+      atStation:etaMin===0,
+      status:t.coupled_with||'On Time',
+      platform:track||'--'
+    });
   });
 
-  // Sort by ETA
+  // Sort by ETA, at-platform trains first
   rows.sort((a,b)=>a.etaMin-b.etaMin);
 
   const ann=state.announcements[0];
@@ -852,18 +879,20 @@ function renderArrivalsScreen(){
     <div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">
       <span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>
       <span style="color:#555;font-size:6px;font-weight:700;flex:1">NEXT STATION</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:28px">PLT</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:22px">ETA</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:30px">STATUS</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:30px">TRACK</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:28px">ETA</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:36px">STATUS</span>
     </div>
     ${rows.length?rows.map((r,i)=>{
-      const statusColor=r.status==='Delayed'?'#f5c842':r.status==='Cancelled'?'#e05c5c':r.status==='Boarding'?'#4A90D9':'#3dd68c';
-      return `<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:${i%2?'#0a0a0a':'#000'}">
+      const statusColor=r.atStation?'#4A90D9':r.status==='Delayed'?'#f5c842':r.status==='Cancelled'?'#e05c5c':'#3dd68c';
+      const etaDisplay=r.atStation?'NOW':r.etaMin===0?'NOW':r.etaMin+'m';
+      const statusDisplay=r.atStation?'At Plt':r.status;
+      return `<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:${i%2?'#0a0a0a':'#000'}${r.atStation?';border-left:2px solid #4A90D9':''}">
         <div style="background:${r.color}22;border:1px solid ${r.color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${r.color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.label}</div>
-        <span style="color:#ddd;font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.dest}</span>
-        <span style="color:#888;font-size:7px;width:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform}</span>
-        <span style="color:${r.etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:22px">${r.etaMin===0?'NOW':r.etaMin+'m'}</span>
-        <span style="font-size:6px;width:30px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.status}</span>
+        <span style="color:${r.atStation?'#fff':'#ddd'};font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:${r.atStation?700:400}">${r.dest}</span>
+        <span style="color:#888;font-size:7px;width:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform}</span>
+        <span style="color:${r.atStation?'#4A90D9':r.etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:28px">${etaDisplay}</span>
+        <span style="font-size:6px;width:36px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${statusDisplay}</span>
       </div>`;
     }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains active</div>`}
     <div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated ${new Date().toLocaleTimeString('en-GB')}</div>
