@@ -815,9 +815,9 @@ function renderArrivalsScreen(page=0){
     </div>
     ${slice.length?slice.map((t,i)=>{
       const isOp=t._isOp;
-      const rk=isOp?null:getRoute(t.number);
+      const rk=isOp?null:(['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number));
       const color=rk?LINE_COLORS[rk]:'#a07fff';
-      const label=rk?LINE_LABELS[rk]:(t.operator||'Guest');
+      const label=rk?LINE_LABELS[rk]:(isOp?(t.operator||t.train_number||'Unknown'):'Unknown');
       let platform,dest,etaMin,status;
       if(isOp){
         const pts=(t.location||'').split(' — ');
