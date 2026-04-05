@@ -803,38 +803,41 @@ function prevScreen(){const s=buildScreenList();currentScreen=(currentScreen-1+s
 function nextScreen(){const s=buildScreenList();currentScreen=(currentScreen+1)%s.length;renderDisplayPreview();}
 
 function renderArrivalsScreen(){
-  // Get one arriving train per A/E/K line heading toward Union Station, sorted by ETA
+  // For each line, pick the train with the lowest ETA to its next station
   const rows=[];
   ['A','E','K'].forEach(rk=>{
-    // Find all trains on this line heading toward USP
-    const candidates=state.trains.filter(t=>{
+    let best=null, bestEta=Infinity, bestDest='Terminus';
+    state.trains.forEach(t=>{
       const r=['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number);
-      return r===rk;
-    });
-    // Pick the one with the lowest positive ETA to USP
-    let best=null,bestEta=Infinity;
-    candidates.forEach(t=>{
-      const eta=etaToUSP(t);
-      if(eta!==null&&eta<bestEta){bestEta=eta;best=t;}
+      if(r!==rk) return;
+      const dir=getDirection(t.number);
+      const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
+      const idx2=track.indexOf(t.location);
+      if(idx2===-1) return;
+      // Find next station ahead
+      const nextStnBlock=track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]);
+      if(!nextStnBlock) return;
+      const blocksAway=track.indexOf(nextStnBlock)-(idx2);
+      const etaMin=Math.round(blocksAway*30/60);
+      if(etaMin<bestEta){
+        bestEta=etaMin;
+        best=t;
+        bestDest=STATION_NAMES[ROUTES[rk].stations[nextStnBlock]]||ROUTES[rk].stations[nextStnBlock];
+      }
     });
     if(best){
-      const dir=getDirection(best.number);
-      const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
-      const idx2=track.indexOf(best.location);
-      // Next station after current position (for destination display)
-      const nextStn=idx2>=0?track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]):null;
-      const dest=nextStn?(STATION_NAMES[ROUTES[rk].stations[nextStn]]||ROUTES[rk].stations[nextStn]):'Union Station';
-      rows.push({rk,label:LINE_LABELS[rk],color:LINE_COLORS[rk],dest,etaMin:bestEta,status:'On Time',platform:LINE_PLATFORM[rk]});
+      rows.push({label:LINE_LABELS[rk],color:LINE_COLORS[rk],dest:bestDest,etaMin:bestEta,status:'On Time',platform:LINE_PLATFORM[rk]});
     }
   });
-  // Also add operator trains
+
+  // Add true operator trains
   const trueOps=state.opTrains.filter(o=>!getRoute(o.train_number));
   trueOps.forEach(t=>{
     const pts=(t.location||'').split(' -- ');
-    const etaMin=parseInt(t.direction)||0;
-    rows.push({rk:null,label:t.operator||t.train_number||'Guest',color:'#a07fff',dest:t.route||'--',etaMin,status:t.coupled_with||'On Time',isOp:true,platform:pts[0]||'--'});
+    rows.push({label:t.operator||t.train_number||'Guest',color:'#a07fff',dest:t.route||'--',etaMin:parseInt(t.direction)||99,status:t.coupled_with||'On Time',platform:pts[0]||'--'});
   });
-  // Sort all rows by ETA ascending
+
+  // Sort by ETA
   rows.sort((a,b)=>a.etaMin-b.etaMin);
 
   const ann=state.announcements[0];
@@ -849,9 +852,9 @@ function renderArrivalsScreen(){
     ${ann?`<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">&#128226; ${ann.message}</div>`:''}
     <div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">
       <span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>
-      <span style="color:#555;font-size:6px;font-weight:700;flex:1">DESTINATION</span>
+      <span style="color:#555;font-size:6px;font-weight:700;flex:1">NEXT STATION</span>
       <span style="color:#555;font-size:6px;font-weight:700;width:28px">PLT</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:22px">DUE</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:22px">ETA</span>
       <span style="color:#555;font-size:6px;font-weight:700;width:30px">STATUS</span>
     </div>
     ${rows.length?rows.map((r,i)=>{
@@ -859,11 +862,11 @@ function renderArrivalsScreen(){
       return `<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:${i%2?'#0a0a0a':'#000'}">
         <div style="background:${r.color}22;border:1px solid ${r.color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${r.color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.label}</div>
         <span style="color:#ddd;font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.dest}</span>
-        <span style="color:#888;font-size:7px;width:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform||'--'}</span>
+        <span style="color:#888;font-size:7px;width:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform}</span>
         <span style="color:${r.etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:22px">${r.etaMin===0?'NOW':r.etaMin+'m'}</span>
         <span style="font-size:6px;width:30px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.status}</span>
       </div>`;
-    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains approaching Union Station</div>`}
+    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains active</div>`}
     <div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated ${new Date().toLocaleTimeString('en-GB')}</div>
   </div>`;
 }
