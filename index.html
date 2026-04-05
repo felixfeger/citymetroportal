@@ -970,7 +970,7 @@ async function deleteAd(id){await api(`/ads/${id}`,'DELETE');toast('Deleted');re
 
 function v(id){return document.getElementById(id)?.value?.trim()||'';}
 
-setInterval(()=>{if(document.getElementById('panel-display').classList.contains('active')){nextScreen();}},37000);
+setInterval(()=>{if(document.getElementById('panel-display').classList.contains('active')){nextScreen();}},12000);
 refreshAll();
 setInterval(refreshAll,15000);
 </script>
