@@ -763,14 +763,27 @@ function renderAds(){
 
 // ── Display Preview ───────────────────────────────────────────
 function buildScreenList(){
-  const trueOpsForBuild=state.opTrains.filter(o=>!getRoute(o.train_number));
-  const all=[...state.trains,...trueOpsForBuild.map(o=>({...o,number:o.train_number,_isOp:true}))];
-  const pages=Math.ceil(all.length/4)||1;
   const screens=[];
-  for(let p=0;p<pages;p++) screens.push({label:`Arrivals${pages>1?` — Page ${p+1}`:''}`,render:()=>renderArrivalsScreen(p)});
+  screens.push({label:'Arrivals',render:()=>renderArrivalsScreen()});
   screens.push({label:'Service Status',render:renderStatusScreenPreview});
   if(state.ads.filter(a=>a.active).length) screens.push({label:'Advertisement',render:renderAdScreen});
   return screens;
+}
+
+// Compute ETA in minutes for a City Metro train heading toward Union Station
+function etaToUSP(t){
+  const rk=['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number);
+  if(!rk) return null;
+  const dir=getDirection(t.number);
+  const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
+  // USP station blocks per line/direction
+  const uspBlocks={A:{EB:'AR_USP1',WB:'AR_USP1'},E:{EB:'AR_USP2',WB:'AR_USP2'},K:{ST:'KW_USP3'}};
+  const uspBlock=uspBlocks[rk]?.[dir]||uspBlocks[rk]?.ST;
+  if(!uspBlock) return null;
+  const trainIdx=track.indexOf(t.location);
+  const uspIdx=track.indexOf(uspBlock);
+  if(trainIdx===-1||uspIdx===-1||uspIdx<=trainIdx) return null;
+  return Math.round((uspIdx-trainIdx)*30/60);
 }
 
 function renderDisplayPreview(){
@@ -789,61 +802,68 @@ function renderDisplayPreview(){
 function prevScreen(){const s=buildScreenList();currentScreen=(currentScreen-1+s.length)%s.length;renderDisplayPreview();}
 function nextScreen(){const s=buildScreenList();currentScreen=(currentScreen+1)%s.length;renderDisplayPreview();}
 
-function renderArrivalsScreen(page=0){
-  // Filter out any operator trains that are actually A/E/K metro trains (dispatch error guard)
+function renderArrivalsScreen(){
+  // Get one arriving train per A/E/K line heading toward Union Station, sorted by ETA
+  const rows=[];
+  ['A','E','K'].forEach(rk=>{
+    // Find all trains on this line heading toward USP
+    const candidates=state.trains.filter(t=>{
+      const r=['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number);
+      return r===rk;
+    });
+    // Pick the one with the lowest positive ETA to USP
+    let best=null,bestEta=Infinity;
+    candidates.forEach(t=>{
+      const eta=etaToUSP(t);
+      if(eta!==null&&eta<bestEta){bestEta=eta;best=t;}
+    });
+    if(best){
+      const dir=getDirection(best.number);
+      const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
+      const idx2=track.indexOf(best.location);
+      // Next station after current position (for destination display)
+      const nextStn=idx2>=0?track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]):null;
+      const dest=nextStn?(STATION_NAMES[ROUTES[rk].stations[nextStn]]||ROUTES[rk].stations[nextStn]):'Union Station';
+      rows.push({rk,label:LINE_LABELS[rk],color:LINE_COLORS[rk],dest,etaMin:bestEta,status:'On Time',platform:LINE_PLATFORM[rk]});
+    }
+  });
+  // Also add operator trains
   const trueOps=state.opTrains.filter(o=>!getRoute(o.train_number));
-  const all=[...state.trains,...trueOps.map(o=>({...o,number:o.train_number,_isOp:true}))];
-  const slice=all.slice(page*4,(page+1)*4);
+  trueOps.forEach(t=>{
+    const pts=(t.location||'').split(' -- ');
+    const etaMin=parseInt(t.direction)||0;
+    rows.push({rk:null,label:t.operator||t.train_number||'Guest',color:'#a07fff',dest:t.route||'--',etaMin,status:t.coupled_with||'On Time',isOp:true,platform:pts[0]||'--'});
+  });
+  // Sort all rows by ETA ascending
+  rows.sort((a,b)=>a.etaMin-b.etaMin);
+
   const ann=state.announcements[0];
   const now=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  const totalPages=Math.ceil(all.length/4);
   return `<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">
     <div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">
       <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>
       <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px">CITY METRO</span>
       <span style="color:#888;font-size:7px;margin-left:2px">Union Station</span>
-      ${totalPages>1?`<span style="font-size:7px;color:#555;margin-left:4px">pg ${page+1}/${totalPages}</span>`:''}
       <span style="color:#fff;font-size:9px;font-weight:700;margin-left:auto">${now}</span>
     </div>
-    ${ann?`<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">📢 ${ann.message}</div>`:''}
+    ${ann?`<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">&#128226; ${ann.message}</div>`:''}
     <div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">
       <span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>
       <span style="color:#555;font-size:6px;font-weight:700;flex:1">DESTINATION</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:36px">PLT</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:28px">PLT</span>
       <span style="color:#555;font-size:6px;font-weight:700;width:22px">DUE</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:32px">STATUS</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:30px">STATUS</span>
     </div>
-    ${slice.length?slice.map((t,i)=>{
-      const isOp=t._isOp;
-      const rk=isOp?null:(['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number));
-      const color=rk?LINE_COLORS[rk]:'#a07fff';
-      const label=rk?LINE_LABELS[rk]:(isOp?(t.operator||t.train_number||'Unknown'):'Unknown');
-      let platform,dest,etaMin,status;
-      if(isOp){
-        const pts=(t.location||'').split(' — ');
-        platform=pts[0]||'—';
-        dest=t.route||'—';
-        etaMin=parseInt(t.direction)||0;
-        status=t.coupled_with||'On Time';
-      } else {
-        platform=rk?LINE_PLATFORM[rk]:'—';
-        const dir=getDirection(t.number);
-        const track=rk?(ROUTES[rk][dir]||ROUTES[rk].ST||[]):[];
-        const idx2=track.indexOf(t.location);
-        const nextStn=idx2>=0?track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]):null;
-        dest=nextStn?(STATION_NAMES[ROUTES[rk].stations[nextStn]]||ROUTES[rk].stations[nextStn]):'Terminus';
-        etaMin=nextStn?Math.round((track.indexOf(nextStn)-idx2)*30/60):0;
-        status='On Time';
-      }
-      const statusColor=status==='Delayed'?'#f5c842':status==='Cancelled'?'#e05c5c':status==='Boarding'?'#4A90D9':'#3dd68c';
-      return `<div style="display:flex;gap:3px;align-items:center;padding:5px 8px;background:${i%2?'#0a0a0a':'#000'}">
-        <div style="background:${color}22;border:1px solid ${color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</div>
-        <span style="color:#ddd;font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${dest}</span>
-        <span style="color:#888;font-size:7px;width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${platform}</span>
-        <span style="color:${etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:22px">${isOp?(etaMin?etaMin+'m':'—'):etaMin===0?'NOW':etaMin+'m'}</span>
-        <span style="font-size:6px;width:32px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${status}</span>
+    ${rows.length?rows.map((r,i)=>{
+      const statusColor=r.status==='Delayed'?'#f5c842':r.status==='Cancelled'?'#e05c5c':r.status==='Boarding'?'#4A90D9':'#3dd68c';
+      return `<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:${i%2?'#0a0a0a':'#000'}">
+        <div style="background:${r.color}22;border:1px solid ${r.color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${r.color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.label}</div>
+        <span style="color:#ddd;font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.dest}</span>
+        <span style="color:#888;font-size:7px;width:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform||'--'}</span>
+        <span style="color:${r.etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:22px">${r.etaMin===0?'NOW':r.etaMin+'m'}</span>
+        <span style="font-size:6px;width:30px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.status}</span>
       </div>`;
-    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains</div>`}
+    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains approaching Union Station</div>`}
     <div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated ${new Date().toLocaleTimeString('en-GB')}</div>
   </div>`;
 }
@@ -866,7 +886,7 @@ function renderStatusScreenPreview(){
       return `<div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid #111">
         <div style="width:22px;height:22px;border-radius:50%;background:${LINE_COLORS[rk]};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;flex-shrink:0">${rk}</div>
         <div style="flex:1">
-          <div style="color:#fff;font-size:8px;font-weight:700">${LINE_LABELS[rk]} — ${LINE_PLATFORM[rk]}</div>
+          <div style="color:#fff;font-size:8px;font-weight:700">${LINE_LABELS[rk]}</div>
           <div style="font-size:7px;color:${color}">${label}</div>
         </div>
         <div style="width:6px;height:6px;border-radius:50%;background:${color}"></div>
