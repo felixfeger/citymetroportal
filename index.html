@@ -808,95 +808,76 @@ function renderArrivalsScreen(){
     state.trains.forEach(t=>{
       const r=['A','E','K'].includes((t.route||'').toUpperCase())?(t.route||'').toUpperCase():getRoute(t.number);
       if(r!==rk) return;
-      const dir=getDirection(t.number);
-      const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
-      const idx2=track.indexOf(t.location);
-      if(idx2===-1) return;
-
-      // Check if train is currently AT a station block
-      const atStation=!!ROUTES[rk].stations[t.location];
-      if(atStation){
-        // At station — ETA 0, destination is this station
-        const stnCode=ROUTES[rk].stations[t.location];
-        const stnName=STATION_NAMES[stnCode]||stnCode;
-        if(0<bestEta){bestEta=0;best=t;bestDest=stnName;bestAtStation=true;}
-        return;
-      }
-
-      // Not at station — find next station ahead
-      const nextStnBlock=track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]);
-      if(!nextStnBlock) return;
-      const blocksAway=track.indexOf(nextStnBlock)-idx2;
-      const etaMin=Math.round(blocksAway*30/60);
-      if(etaMin<bestEta){
-        bestEta=etaMin;best=t;
-        bestDest=STATION_NAMES[ROUTES[rk].stations[nextStnBlock]]||ROUTES[rk].stations[nextStnBlock];
-        bestAtStation=false;
-      }
+      const dirs=rk==='K'?['ST']:['EB','WB'];
+      dirs.forEach(dir=>{
+        const track=ROUTES[rk]?.[dir]||[];
+        const idx2=track.indexOf(t.location);
+        if(idx2===-1) return;
+        if(ROUTES[rk].stations[t.location]){
+          const stnName=STATION_NAMES[ROUTES[rk].stations[t.location]]||ROUTES[rk].stations[t.location];
+          if(0<=bestEta){bestEta=0;best=t;bestDest=stnName;bestAtStation=true;}
+          return;
+        }
+        const nextStnBlock=track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]);
+        if(!nextStnBlock) return;
+        const blocksAway=track.indexOf(nextStnBlock)-idx2;
+        const etaMin=Math.round(blocksAway*30/60);
+        if(etaMin<bestEta){
+          bestEta=etaMin;best=t;
+          bestDest=STATION_NAMES[ROUTES[rk].stations[nextStnBlock]]||ROUTES[rk].stations[nextStnBlock];
+          bestAtStation=false;
+        }
+      });
     });
     if(best){
-      // Track number = line number (1=A, 2=E, 3=K)
       const trackNum={A:'Track 1',E:'Track 2',K:'Track 3'}[rk];
-      rows.push({
-        label:LINE_LABELS[rk],color:LINE_COLORS[rk],
-        dest:bestDest,etaMin:bestEta,
-        atStation:bestAtStation,
-        status:bestAtStation?'At Platform':'On Time',
-        platform:trackNum
-      });
+      rows.push({label:LINE_LABELS[rk],color:LINE_COLORS[rk],dest:bestDest,etaMin:bestEta,atStation:bestAtStation,status:bestAtStation?'At Platform':'On Time',platform:trackNum});
     }
   });
-
-  // True operator trains
   const trueOps=state.opTrains.filter(o=>!getRoute(o.train_number));
   trueOps.forEach(t=>{
-    // location field is "Platform X -- Track Y" — extract just track number
     const parts=(t.location||'').split('--');
     const track=(parts[1]||parts[0]||'').trim();
     const etaMin=parseInt(t.direction)||99;
-    rows.push({
-      label:t.operator||t.train_number||'Guest',color:'#a07fff',
-      dest:t.route||'--',etaMin,
-      atStation:etaMin===0,
-      status:t.coupled_with||'On Time',
-      platform:track||'--'
-    });
+    rows.push({label:t.operator||t.train_number||'Guest',color:'#a07fff',dest:t.route||'--',etaMin,atStation:etaMin===0,status:t.coupled_with||'On Time',platform:track||'--'});
   });
-
-  // Sort by ETA, at-platform trains first
   rows.sort((a,b)=>a.etaMin-b.etaMin);
-
   const ann=state.announcements[0];
   const now=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  return `<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">
-    <div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">
-      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>
-      <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px">CITY METRO</span>
-      <span style="color:#888;font-size:7px;margin-left:2px">Union Station</span>
-      <span style="color:#fff;font-size:9px;font-weight:700;margin-left:auto">${now}</span>
-    </div>
-    ${ann?`<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">&#128226; ${ann.message}</div>`:''}
-    <div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">
-      <span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>
-      <span style="color:#555;font-size:6px;font-weight:700;flex:1">NEXT STATION</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:30px">TRACK</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:28px">ETA</span>
-      <span style="color:#555;font-size:6px;font-weight:700;width:36px">STATUS</span>
-    </div>
-    ${rows.length?rows.map((r,i)=>{
-      const statusColor=r.atStation?'#4A90D9':r.status==='Delayed'?'#f5c842':r.status==='Cancelled'?'#e05c5c':'#3dd68c';
-      const etaDisplay=r.atStation?'NOW':r.etaMin===0?'NOW':r.etaMin+'m';
-      const statusDisplay=r.atStation?'At Plt':r.status;
-      return `<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:${i%2?'#0a0a0a':'#000'}${r.atStation?';border-left:2px solid #4A90D9':''}">
-        <div style="background:${r.color}22;border:1px solid ${r.color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${r.color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.label}</div>
-        <span style="color:${r.atStation?'#fff':'#ddd'};font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:${r.atStation?700:400}">${r.dest}</span>
-        <span style="color:#888;font-size:7px;width:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.platform}</span>
-        <span style="color:${r.atStation?'#4A90D9':r.etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:28px">${etaDisplay}</span>
-        <span style="font-size:6px;width:36px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${statusDisplay}</span>
-      </div>`;
-    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains active</div>`}
-    <div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated ${new Date().toLocaleTimeString('en-GB')}</div>
-  </div>`;
+  return '<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">'
+    +'<div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">'
+    +'<div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>'
+    +'<span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px">CITY METRO</span>'
+    +'<span style="color:#888;font-size:7px;margin-left:2px">Union Station</span>'
+    +'<span style="color:#fff;font-size:9px;font-weight:700;margin-left:auto">'+now+'</span>'
+    +'</div>'
+    +(ann?'<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">&#128226; '+ann.message+'</div>':'')
+    +'<div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">'
+    +'<span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>'
+    +'<span style="color:#555;font-size:6px;font-weight:700;flex:1">DESTINATION</span>'
+    +'<span style="color:#555;font-size:6px;font-weight:700;width:30px">TRACK</span>'
+    +'<span style="color:#555;font-size:6px;font-weight:700;width:28px">ETA</span>'
+    +'<span style="color:#555;font-size:6px;font-weight:700;width:36px">STATUS</span>'
+    +'</div>'
+    +(rows.length?rows.map((r,i)=>{
+      const sc=r.atStation?'#4A90D9':r.status==='Delayed'?'#f5c842':r.status==='Cancelled'?'#e05c5c':'#3dd68c';
+      const eta=r.atStation||r.etaMin===0?'NOW':r.etaMin+'m';
+      const st=r.atStation?'At Plt':r.status;
+      const bg=i%2?'#0a0a0a':'#000';
+      const bl=r.atStation?';border-left:2px solid #4A90D9':'';
+      const fw=r.atStation?700:400;
+      const tc=r.atStation?'#fff':'#ddd';
+      const ec=r.atStation?'#4A90D9':r.etaMin<=2?'#f90':'#fff';
+      return '<div style="display:flex;gap:3px;align-items:center;padding:6px 8px;background:'+bg+bl+'">'
+        +'<div style="background:'+r.color+'22;border:1px solid '+r.color+';border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:'+r.color+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.label+'</div>'
+        +'<span style="color:'+tc+';font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:'+fw+'">'+r.dest+'</span>'
+        +'<span style="color:#888;font-size:7px;width:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.platform+'</span>'
+        +'<span style="color:'+ec+';font-size:9px;font-weight:700;width:28px">'+eta+'</span>'
+        +'<span style="font-size:6px;width:36px;color:'+sc+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+st+'</span>'
+        +'</div>';
+    }).join(''):'<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains active</div>')
+    +'<div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated '+new Date().toLocaleTimeString('en-GB')+'</div>'
+    +'</div>';
 }
 
 function renderStatusScreenPreview(){
