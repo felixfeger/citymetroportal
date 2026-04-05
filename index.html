@@ -190,7 +190,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="card">
         <div class="card-header"><span class="card-title">All Trains</span><span class="text-muted" style="font-size:11px" id="trains-count"></span></div>
         <table><thead><tr>
-          <th>Train #</th><th>Line</th><th>Platform</th><th>Location Block</th><th>Direction</th><th>Connected</th><th>Coupled With</th>
+          <th>Train #</th><th>Line</th><th>Location Block</th><th>Direction</th><th>Connected</th><th>Coupled With</th>
         </tr></thead><tbody id="trains-tbody"></tbody></table>
         <div class="pagination" id="trains-pagination"></div>
       </div>
@@ -590,13 +590,16 @@ function renderTrains(){
   tbody.innerHTML=slice.map(t=>{
     const rk=getRoute(t.number);
     const dir=getDirection(t.number);
-    const platform=rk?LINE_PLATFORM[rk]:'—';
     const lineLabel=rk?LINE_LABELS[rk]:(t.route||t.number);
+    const lineColor=rk?LINE_COLORS[rk]:'#a07fff';
     const pillCls=rk?`pill-${rk}`:'pill-op';
+    // Route indicator: coloured dot + label, no colour name text
+    const routeCell=rk
+      ? `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:50%;background:${lineColor};flex-shrink:0"></div><span class="pill ${pillCls}">${lineLabel}</span></div>`
+      : `<span class="pill pill-op">${lineLabel}</span>`;
     return `<tr>
       <td><strong>${t.number}</strong></td>
-      <td><span class="pill ${pillCls}">${lineLabel}</span></td>
-      <td class="text-muted">${platform}</td>
+      <td>${routeCell}</td>
       <td><code style="font-size:12px;color:var(--muted)">${t.location||'—'}</code></td>
       <td class="text-muted">${dir==='EB'?'Eastbound':dir==='WB'?'Westbound':'—'}</td>
       <td class="${t.connected?'badge-connected':'badge-disconnected'}">${t.connected?'● Connected':'○ Offline'}</td>
@@ -760,7 +763,8 @@ function renderAds(){
 
 // ── Display Preview ───────────────────────────────────────────
 function buildScreenList(){
-  const all=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
+  const trueOpsForBuild=state.opTrains.filter(o=>!getRoute(o.train_number));
+  const all=[...state.trains,...trueOpsForBuild.map(o=>({...o,number:o.train_number,_isOp:true}))];
   const pages=Math.ceil(all.length/4)||1;
   const screens=[];
   for(let p=0;p<pages;p++) screens.push({label:`Arrivals${pages>1?` — Page ${p+1}`:''}`,render:()=>renderArrivalsScreen(p)});
@@ -786,7 +790,9 @@ function prevScreen(){const s=buildScreenList();currentScreen=(currentScreen-1+s
 function nextScreen(){const s=buildScreenList();currentScreen=(currentScreen+1)%s.length;renderDisplayPreview();}
 
 function renderArrivalsScreen(page=0){
-  const all=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
+  // Filter out any operator trains that are actually A/E/K metro trains (dispatch error guard)
+  const trueOps=state.opTrains.filter(o=>!getRoute(o.train_number));
+  const all=[...state.trains,...trueOps.map(o=>({...o,number:o.train_number,_isOp:true}))];
   const slice=all.slice(page*4,(page+1)*4);
   const ann=state.announcements[0];
   const now=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
