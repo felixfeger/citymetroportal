@@ -21,15 +21,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .content{flex:1;overflow-y:auto;padding:24px;}
 .sidebar-logo{padding:18px 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
 .sidebar-logo img{width:32px;height:32px;border-radius:50%;background:#fff;padding:2px;}
-.sidebar-logo span{font-weight:700;font-size:15px;letter-spacing:-.3px;}
+.sidebar-logo span{font-weight:700;font-size:15px;}
 .sidebar-logo small{display:block;font-size:10px;color:var(--muted);font-weight:400;letter-spacing:.5px;text-transform:uppercase;}
 .nav-section{padding:16px 10px 6px;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;margin:1px 6px;border-radius:7px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:.15s;}
 .nav-item:hover{background:var(--surface2);color:var(--text);}
 .nav-item.active{background:rgba(74,144,217,.15);color:var(--a);}
-.nav-item svg{flex-shrink:0;opacity:.7;}
-.nav-item.active svg{opacity:1;}
-.topbar-title{font-size:15px;font-weight:600;letter-spacing:-.2px;}
+.nav-item svg{flex-shrink:0;opacity:.7;}.nav-item.active svg{opacity:1;}
+.topbar-title{font-size:15px;font-weight:600;}
 .clock{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.5px;}
 .clock-date{font-size:11px;color:var(--muted);text-align:right;}
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;}
@@ -39,7 +38,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .refresh-btn:hover{border-color:var(--a);color:var(--a);}
 .panel{display:none;}.panel.active{display:block;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .card-title{font-size:13px;font-weight:600;}
 .card-body{padding:20px;}
 table{width:100%;border-collapse:collapse;}
@@ -47,7 +46,7 @@ th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;letter-spaci
 td{padding:11px 14px;border-bottom:1px solid rgba(42,42,58,.6);font-size:13px;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(255,255,255,.02);}
-.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.3px;}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
 .pill-A{background:rgba(74,144,217,.2);color:var(--a);}
 .pill-E{background:rgba(232,130,58,.2);color:var(--e);}
 .pill-K{background:rgba(217,74,122,.2);color:var(--k);}
@@ -68,7 +67,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:.15s;}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--a);}
 .field select option{background:var(--surface);}
-.field textarea{resize:vertical;min-height:80px;}
+.field textarea{resize:vertical;min-height:70px;}
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
 .stat-label{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
@@ -79,7 +78,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .route-line-dot{width:10px;height:10px;border-radius:50%;}
 .block-track{display:flex;align-items:center;gap:2px;overflow-x:auto;padding-bottom:4px;}
 .block-seg{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;}
-.block-cell{width:36px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);position:relative;display:flex;align-items:center;justify-content:center;font-size:7px;color:var(--muted);}
+.block-cell{width:36px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);position:relative;display:flex;align-items:center;justify-content:center;}
 .block-cell.station{border-color:currentColor;background:rgba(255,255,255,.04);}
 .block-cell .train-dot{position:absolute;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);}
 .block-label{font-size:7px;color:var(--muted);max-width:36px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -87,7 +86,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .connector{width:6px;height:2px;background:var(--border);flex-shrink:0;margin-top:-14px;}
 .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;}
 .modal-backdrop.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;}
 .modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .modal-title{font-size:15px;font-weight:700;}
 .modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;}
@@ -98,16 +97,21 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .toast.success{background:rgba(61,214,140,.12);border-color:rgba(61,214,140,.3);color:var(--green);}
 .toast.error{background:rgba(224,92,92,.12);border-color:rgba(224,92,92,.3);color:var(--red);}
 @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
-.display-preview{background:#000;border-radius:12px;border:3px solid #333;overflow:hidden;aspect-ratio:320/240;width:100%;max-width:480px;position:relative;}
-/* Pagination */
+.display-preview{background:#000;border-radius:12px;border:3px solid #333;overflow:hidden;aspect-ratio:320/240;width:100%;max-width:480px;}
 .pagination{display:flex;align-items:center;gap:8px;padding:12px 14px;border-top:1px solid var(--border);}
 .page-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:12px;font-family:var(--font);}
-.page-btn:hover{border-color:var(--a);color:var(--a);}
-.page-btn.active{background:var(--a);color:#fff;border-color:var(--a);}
+.page-btn:hover{border-color:var(--a);color:var(--a);}.page-btn.active{background:var(--a);color:#fff;border-color:var(--a);}
 .page-info{font-size:11px;color:var(--muted);margin-left:auto;}
+/* Service status override cards */
+.status-override-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.status-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.status-card-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.status-dot{width:10px;height:10px;border-radius:50%;}
+.status-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;margin-bottom:8px;}
+.status-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-family:var(--font);font-size:12px;outline:none;}
 ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px;}
 .empty-state{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
-.flex{display:flex;align-items:center;}.gap-8{gap:8px;}.text-muted{color:var(--muted);}.text-green{color:var(--green);}.text-red{color:var(--red);}.text-yellow{color:var(--yellow);}
+.flex{display:flex;align-items:center;}.gap-8{gap:8px;}.text-muted{color:var(--muted);}.text-green{color:var(--green);}
 .section-title{font-size:18px;font-weight:700;letter-spacing:-.4px;margin-bottom:6px;}
 .section-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
 </style>
@@ -135,6 +139,9 @@ tr:hover td{background:rgba(255,255,255,.02);}
   <div class="nav-section">Comms</div>
   <div class="nav-item" onclick="showPanel('incidents',this)">
     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Incidents
+  </div>
+  <div class="nav-item" onclick="showPanel('status',this)">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Service Status
   </div>
   <div class="nav-item" onclick="showPanel('announcements',this)">
     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Announcements
@@ -169,7 +176,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="section-sub">Live overview of the City Metro network</div>
       <div class="stat-row">
         <div class="stat-card"><div class="stat-label">Active Trains</div><div class="stat-value text-green" id="stat-trains">—</div><div class="stat-sub">across all lines</div></div>
-        <div class="stat-card"><div class="stat-label">Incidents</div><div class="stat-value text-yellow" id="stat-incidents">—</div><div class="stat-sub">active now</div></div>
+        <div class="stat-card"><div class="stat-label">Incidents</div><div class="stat-value" id="stat-incidents" style="color:var(--yellow)">—</div><div class="stat-sub">active now</div></div>
         <div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value" id="stat-ann">—</div><div class="stat-sub">active</div></div>
         <div class="stat-card"><div class="stat-label">Ads Running</div><div class="stat-value" id="stat-ads">—</div><div class="stat-sub">in rotation</div></div>
       </div>
@@ -179,13 +186,12 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <!-- LIVE TRAINS -->
     <div class="panel" id="panel-trains">
       <div class="section-title">Live Trains</div>
-      <div class="section-sub">City Metro operated trains — positions updated by dispatch software</div>
+      <div class="section-sub">Positions updated by dispatch software — read only</div>
       <div class="card">
         <div class="card-header"><span class="card-title">All Trains</span><span class="text-muted" style="font-size:11px" id="trains-count"></span></div>
         <table><thead><tr>
           <th>Train #</th><th>Line</th><th>Platform</th><th>Location Block</th><th>Direction</th><th>Connected</th><th>Coupled With</th>
-        </tr></thead>
-        <tbody id="trains-tbody"></tbody></table>
+        </tr></thead><tbody id="trains-tbody"></tbody></table>
         <div class="pagination" id="trains-pagination"></div>
       </div>
     </div>
@@ -193,46 +199,55 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <!-- OPERATORS -->
     <div class="panel" id="panel-operators">
       <div class="section-title">Other Operators</div>
-      <div class="section-sub">Guest operator trains shown on the display board only — not part of City Metro live data</div>
+      <div class="section-sub">Guest operator trains — shown on display board only, not in City Metro live data</div>
       <div class="card">
         <div class="card-header"><span class="card-title">Operator Trains</span><button class="btn btn-primary btn-sm" onclick="openModal('modal-add-op')">+ Add Train</button></div>
         <table><thead><tr>
-          <th>Operator</th><th>Train #</th><th>Service Name</th><th>Platform / Track</th><th>Status</th><th></th>
-        </tr></thead>
-        <tbody id="ops-tbody"></tbody></table>
+          <th>Operator</th><th>Train #</th><th>Service Name</th><th>Platform / Track</th><th>Destination</th><th>ETA</th><th>Status</th><th></th>
+        </tr></thead><tbody id="ops-tbody"></tbody></table>
       </div>
     </div>
 
     <!-- TIMETABLE -->
     <div class="panel" id="panel-timetable">
       <div class="section-title">Timetables</div>
-      <div class="section-sub">Manage scheduled services</div>
+      <div class="section-sub">Manage scheduled services for all operators</div>
       <div class="card">
         <div class="card-header"><span class="card-title">Schedule</span><button class="btn btn-primary btn-sm" onclick="openModal('modal-add-tt')">+ Add Service</button></div>
         <table><thead><tr>
-          <th>Route</th><th>Dir</th><th>Origin</th><th>Destination</th><th>Departs</th><th>Days</th><th>Active</th><th></th>
-        </tr></thead>
-        <tbody id="tt-tbody"></tbody></table>
+          <th>Line / Operator</th><th>Direction</th><th>Origin</th><th>Destination</th><th>Departs</th><th>Days</th><th>Active</th><th></th>
+        </tr></thead><tbody id="tt-tbody"></tbody></table>
       </div>
     </div>
 
     <!-- INCIDENTS -->
     <div class="panel" id="panel-incidents">
-      <div class="section-title">Service Incidents</div>
-      <div class="section-sub">Track and communicate disruptions</div>
+      <div class="section-title">Incidents</div>
+      <div class="section-sub">Log and communicate service disruptions</div>
       <div class="card">
         <div class="card-header"><span class="card-title">Active Incidents</span><button class="btn btn-primary btn-sm" onclick="openModal('modal-add-inc')">+ New Incident</button></div>
         <table><thead><tr>
           <th>Severity</th><th>Line</th><th>Title</th><th>Details</th><th>Created</th><th></th>
-        </tr></thead>
-        <tbody id="inc-tbody"></tbody></table>
+        </tr></thead><tbody id="inc-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- SERVICE STATUS -->
+    <div class="panel" id="panel-status">
+      <div class="section-title">Service Status</div>
+      <div class="section-sub">Manually set the status shown on the display board for each line — overrides incident-based status</div>
+      <div class="status-override-grid" id="status-cards"></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Active Incidents</span><span style="font-size:11px;color:var(--muted)">Incidents also affect status unless manually overridden above</span></div>
+        <table><thead><tr><th>Severity</th><th>Line</th><th>Title</th><th></th></tr></thead>
+        <tbody id="status-inc-tbody"></tbody></table>
       </div>
     </div>
 
     <!-- ANNOUNCEMENTS -->
     <div class="panel" id="panel-announcements">
       <div class="section-title">Announcements</div>
-      <div class="section-sub">Scrolling banner messages shown on the display board</div>
+      <div class="section-sub">Scrolling banner messages on the display board</div>
       <div class="card">
         <div class="card-header"><span class="card-title">Active Announcements</span><button class="btn btn-primary btn-sm" onclick="openModal('modal-add-ann')">+ Add</button></div>
         <table><thead><tr><th>Message</th><th>Priority</th><th>Expires</th><th></th></tr></thead>
@@ -243,25 +258,25 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <!-- ADS -->
     <div class="panel" id="panel-ads">
       <div class="section-title">Advertisements</div>
-      <div class="section-sub">Content shown during ad rotation screens</div>
+      <div class="section-sub">Content shown during ad rotation — images are auto-scaled to fit the display</div>
       <div class="card">
         <div class="card-header"><span class="card-title">Ad Rotation</span><button class="btn btn-primary btn-sm" onclick="openModal('modal-add-ad')">+ New Ad</button></div>
-        <table><thead><tr><th>Title</th><th>Body</th><th>Duration</th><th>Active</th><th></th></tr></thead>
+        <table><thead><tr><th>Title</th><th>Body</th><th>Image</th><th>Duration</th><th>Active</th><th></th></tr></thead>
         <tbody id="ads-tbody"></tbody></table>
       </div>
     </div>
 
-    <!-- DISPLAY -->
+    <!-- DISPLAY PREVIEW -->
     <div class="panel" id="panel-display">
       <div class="section-title">Board Preview</div>
-      <div class="section-sub">Simulates the CYD display board — rotates every 30–45 s</div>
+      <div class="section-sub">Simulates the CYD display — rotates every 30–45 s</div>
       <div style="display:flex;gap:24px;flex-wrap:wrap;">
         <div>
           <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px;font-weight:600;">Current Screen</div>
           <div class="display-preview" id="displayPreview"></div>
           <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
             <button class="btn btn-ghost btn-sm" onclick="prevScreen()">← Prev</button>
-            <span style="font-size:11px;color:var(--muted);" id="screenLabel">Arrivals</span>
+            <span style="font-size:11px;color:var(--muted);" id="screenLabel"></span>
             <button class="btn btn-ghost btn-sm" onclick="nextScreen()">Next →</button>
           </div>
         </div>
@@ -278,7 +293,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
 
 <!-- MODALS -->
 
-<!-- Add Operator Train — free form, no route/block system -->
 <div class="modal-backdrop" id="modal-add-op">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Add Operator Train</span><button class="modal-close" onclick="closeModal('modal-add-op')">×</button></div>
@@ -286,13 +300,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="form-grid">
         <div class="field"><label>Operator Name</label><input id="op-operator" placeholder="e.g. City MetroLink"></div>
         <div class="field"><label>Train Number</label><input id="op-number" placeholder="e.g. ML-042"></div>
-        <div class="field" style="grid-column:1/-1"><label>Service / Route Name</label><input id="op-service" placeholder="e.g. MetroLink Express"></div>
+        <div class="field" style="grid-column:1/-1"><label>Service / Route Name</label><input id="op-service" placeholder="e.g. MetroLink Express to Central City"></div>
         <div class="field"><label>Platform</label><input id="op-platform" placeholder="e.g. Platform 4"></div>
-        <div class="field"><label>Track / Location</label><input id="op-track" placeholder="e.g. Union Station Bay 2"></div>
-        <div class="field" style="grid-column:1/-1"><label>Destination</label><input id="op-dest" placeholder="e.g. Central City"></div>
-        <div class="field"><label>ETA / Due (minutes)</label><input id="op-eta" type="number" placeholder="e.g. 5"></div>
+        <div class="field"><label>Track / Bay</label><input id="op-track" placeholder="e.g. Bay 2, North Concourse"></div>
+        <div class="field" style="grid-column:1/-1"><label>Destination</label><input id="op-dest" placeholder="e.g. Central City Terminal"></div>
+        <div class="field"><label>ETA (minutes)</label><input id="op-eta" type="number" placeholder="e.g. 5" min="0"></div>
         <div class="field"><label>Status</label>
-          <select id="op-status"><option value="On Time">On Time</option><option value="Delayed">Delayed</option><option value="Cancelled">Cancelled</option><option value="Boarding">Boarding</option></select>
+          <select id="op-status"><option>On Time</option><option>Delayed</option><option>Cancelled</option><option>Boarding</option><option>Arrived</option></select>
         </div>
       </div>
     </div>
@@ -303,20 +317,36 @@ tr:hover td{background:rgba(255,255,255,.02);}
   </div>
 </div>
 
-<!-- Add Timetable -->
 <div class="modal-backdrop" id="modal-add-tt">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Add Timetable Entry</span><button class="modal-close" onclick="closeModal('modal-add-tt')">×</button></div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="field"><label>Route</label>
-          <select id="tt-route"><option value="A">A Line</option><option value="E">E Line</option><option value="K">K Line</option></select>
+        <div class="field" style="grid-column:1/-1">
+          <label>Line Type</label>
+          <select id="tt-type" onchange="toggleTTFields()">
+            <option value="metro">City Metro Line (A / E / K)</option>
+            <option value="custom">Other Operator / Custom Line</option>
+          </select>
         </div>
-        <div class="field"><label>Direction</label>
-          <select id="tt-dir"><option value="EB">Eastbound</option><option value="WB">Westbound</option><option value="ST">Single Track</option></select>
+        <!-- Metro fields -->
+        <div id="tt-metro-fields" style="display:contents">
+          <div class="field"><label>Route</label>
+            <select id="tt-route"><option value="A">A Line</option><option value="E">E Line</option><option value="K">K Line</option></select>
+          </div>
+          <div class="field"><label>Direction</label>
+            <select id="tt-dir"><option value="EB">Eastbound</option><option value="WB">Westbound</option><option value="ST">Single Track</option></select>
+          </div>
         </div>
-        <div class="field"><label>Origin Station Code</label><input id="tt-origin" placeholder="e.g. USP"></div>
-        <div class="field"><label>Destination Station Code</label><input id="tt-dest" placeholder="e.g. SMP"></div>
+        <!-- Custom fields -->
+        <div id="tt-custom-fields" style="display:none;grid-column:1/-1">
+          <div class="form-grid">
+            <div class="field"><label>Line / Operator Name</label><input id="tt-custom-line" placeholder="e.g. City MetroLink"></div>
+            <div class="field"><label>Direction / Service Type</label><input id="tt-custom-dir" placeholder="e.g. Northbound, Express"></div>
+          </div>
+        </div>
+        <div class="field"><label>Origin</label><input id="tt-origin" placeholder="e.g. USP or Union Station"></div>
+        <div class="field"><label>Destination</label><input id="tt-dest" placeholder="e.g. SMP or Santa Mooica"></div>
         <div class="field"><label>Departs (HH:MM)</label><input id="tt-departs" type="time"></div>
         <div class="field"><label>Days</label><input id="tt-days" value="Mon,Tue,Wed,Thu,Fri,Sat,Sun"></div>
       </div>
@@ -328,7 +358,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
   </div>
 </div>
 
-<!-- Add Incident -->
 <div class="modal-backdrop" id="modal-add-inc">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">New Incident</span><button class="modal-close" onclick="closeModal('modal-add-inc')">×</button></div>
@@ -337,7 +366,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="field"><label>Severity</label>
           <select id="inc-severity"><option value="info">Info</option><option value="warning">Warning</option><option value="critical">Critical</option></select>
         </div>
-        <div class="field"><label>Affected Line</label>
+        <div class="field"><label>Affected Line (optional)</label>
           <select id="inc-route"><option value="">All Lines</option><option value="A">A Line</option><option value="E">E Line</option><option value="K">K Line</option></select>
         </div>
         <div class="field" style="grid-column:1/-1"><label>Title</label><input id="inc-title" placeholder="Brief summary"></div>
@@ -351,7 +380,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
   </div>
 </div>
 
-<!-- Add Announcement -->
 <div class="modal-backdrop" id="modal-add-ann">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Add Announcement</span><button class="modal-close" onclick="closeModal('modal-add-ann')">×</button></div>
@@ -369,7 +397,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
   </div>
 </div>
 
-<!-- Add Ad -->
 <div class="modal-backdrop" id="modal-add-ad">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">New Advertisement</span><button class="modal-close" onclick="closeModal('modal-add-ad')">×</button></div>
@@ -377,7 +404,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="form-grid">
         <div class="field" style="grid-column:1/-1"><label>Title</label><input id="ad-title" placeholder="Headline text"></div>
         <div class="field" style="grid-column:1/-1"><label>Body</label><textarea id="ad-body" placeholder="Ad content…"></textarea></div>
-        <div class="field" style="grid-column:1/-1"><label>Image URL (optional)</label><input id="ad-img" placeholder="https://…"></div>
+        <div class="field" style="grid-column:1/-1"><label>Image URL (optional — auto-scaled to fit display)</label><input id="ad-img" placeholder="https://…"></div>
         <div class="field"><label>Duration (seconds)</label><input id="ad-duration" type="number" value="30"></div>
       </div>
     </div>
@@ -393,90 +420,85 @@ tr:hover td{background:rgba(255,255,255,.02);}
 <script>
 const API = 'https://trains-api.felixfeger46.workers.dev';
 
-// Platform assignments per line
-const LINE_PLATFORM = { A: 'Platform 1', E: 'Platform 2', K: 'Platform 3' };
-const LINE_COLORS   = { A: '#4A90D9', E: '#E8823A', K: '#D94A7A' };
-const LINE_LABELS   = { A: 'A Line', E: 'E Line', K: 'K Line' };
+const LINE_PLATFORM = { A:'Platform 1', E:'Platform 2', K:'Platform 3' };
+const LINE_COLORS   = { A:'#4A90D9', E:'#E8823A', K:'#D94A7A' };
+const LINE_LABELS   = { A:'A Line',  E:'E Line',  K:'K Line'  };
 
 const ROUTES = {
-  A: { label:'A Line', color:'#4A90D9',
+  A:{ label:'A Line', color:'#4A90D9',
     EB:['AR_USP1','AE001','AE002','AE003','AR_DLP2','AE004','AE005','AE006','AE007','AE008','AE009','AR_AMP3','AE010','AE011','AE012','AE013','AE014','AR_DSP2','AE015','AE016','AE017','AR_SMP3'],
     WB:['AR_SMP3','AW017','AW016','AW015','AR_DSP2','AW014','AW013','AW012','AW011','AW010','AR_AMP3','AW009','AW008','AW007','AW006','AW005','AW004','AW_DLP2','AW003','AW002','AW001','AR_USP1'],
     stations:{'AR_USP1':'USP','AR_DLP2':'DLP','AR_AMP3':'AMP','AR_DSP2':'DSP','AR_SMP3':'SMP','AW_DLP2':'DLP'}
   },
-  E: { label:'E Line', color:'#E8823A',
+  E:{ label:'E Line', color:'#E8823A',
     EB:['AR_USP2','AE001','AE002','AE003','AR_DLP1','EE001','EE002','EE003','EM_EQP1','EE004','EE005','EE006','AE_AMP1','EE007','EE008','EE009','EE010','EE011','EE_INF1','EE012','EE013','EE014','EE_TCP2'],
     WB:['EE_TCP2','EW014','EW013','EW012','EW_INF2','EW011','EW010','EW009','EW008','EW007','AE_AMP2','EW006','EW005','EW004','EM_EQP1','EW003','EW002','EW001','AR_DLP1','AW003','AW002','AW001','AR_USP2'],
     stations:{'AR_USP2':'USP','AR_DLP1':'DLP','EM_EQP1':'EQP','AE_AMP1':'AMP','AE_AMP2':'AMP','EE_INF1':'DHP','EW_INF2':'DHP','EE_TCP2':'TCP'}
   },
-  K: { label:'K Line', color:'#D94A7A',
+  K:{ label:'K Line', color:'#D94A7A',
     ST:['KW_USP3','KW001','KW002','KW003','KW_AST1'],
     stations:{'KW_USP3':'USP','KW_AST1':'ATP'}
   }
 };
 
 const STATION_NAMES = {
-  USP:'Union Station', DLP:'Downtown Lego City', EQP:'Emergency HQ',
-  AMP:'Airport Metro TC', DSP:'Death Star City', SMP:'Santa Mooica',
-  DHP:'Desktop Hills', TCP:'Table Central', ATP:'Asian Town', FTP:'FLX Terminal 2'
+  USP:'Union Station',DLP:'Downtown Lego City',EQP:'Emergency HQ',
+  AMP:'Airport Metro TC',DSP:'Death Star City',SMP:'Santa Mooica',
+  DHP:'Desktop Hills',TCP:'Table Central',ATP:'Asian Town',FTP:'FLX Terminal 2'
 };
 
-// Get route from train number e.g. "AE001" → "A", "KW001" → "K"
-function getRoute(number) {
-  const r = String(number)[0].toUpperCase();
-  return ['A','E','K'].includes(r) ? r : null;
-}
+// Manual service status overrides (local state, not persisted — resets on reload)
+// In a future version these could be saved to D1 via a new endpoint
+let serviceStatus = { A:{status:'good',message:''}, E:{status:'good',message:''}, K:{status:'good',message:''} };
 
-// Get direction from train number e.g. "AE001" → "EB", "AW001" → "WB"
-function getDirection(number) {
-  const d = String(number)[1]?.toUpperCase();
-  if(d === 'E') return 'EB';
-  if(d === 'W') return 'WB';
+// Only derive route for trains whose number starts with A, E, or K
+function getRoute(number){
+  const r=String(number||'')[0]?.toUpperCase();
+  return ['A','E','K'].includes(r)?r:null;
+}
+function getDirection(number){
+  const d=String(number||'')[1]?.toUpperCase();
+  if(d==='E') return 'EB';
+  if(d==='W') return 'WB';
   return 'ST';
 }
 
-// State
-let state = { trains:[], incidents:[], announcements:[], ads:[], opTrains:[], timetable:[] };
-let trainPage = 0;
-const TRAINS_PER_PAGE = 8;
-let currentScreen = 0;
+let state={trains:[],incidents:[],announcements:[],ads:[],opTrains:[],timetable:[]};
+let trainPage=0;
+const TRAINS_PER_PAGE=8;
+let currentScreen=0;
 
 // Clock
 function updateClock(){
-  const n = new Date();
-  document.getElementById('clock').textContent = n.toLocaleTimeString('en-GB');
-  document.getElementById('clockDate').textContent = n.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-GB');
+  document.getElementById('clockDate').textContent=n.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 }
-setInterval(updateClock,1000); updateClock();
+setInterval(updateClock,1000);updateClock();
 
-// Panel nav
-function showPanel(id, el){
+function showPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
   if(el) el.classList.add('active');
-  const titles={dashboard:'Dashboard',trains:'Live Trains',operators:'Other Operators',timetable:'Timetables',incidents:'Incidents',announcements:'Announcements',ads:'Advertisements',display:'Board Preview'};
-  document.getElementById('topbarTitle').textContent = titles[id]||id;
+  const titles={dashboard:'Dashboard',trains:'Live Trains',operators:'Other Operators',timetable:'Timetables',incidents:'Incidents',status:'Service Status',announcements:'Announcements',ads:'Advertisements',display:'Board Preview'};
+  document.getElementById('topbarTitle').textContent=titles[id]||id;
   if(id==='display') renderDisplayPreview();
+  if(id==='status') renderStatusPanel();
 }
 
-// Toast
 function toast(msg,type='success'){
   const el=document.createElement('div');
-  el.className='toast '+type;
-  el.textContent=msg;
+  el.className='toast '+type;el.textContent=msg;
   document.getElementById('toastArea').appendChild(el);
   setTimeout(()=>el.remove(),3500);
 }
-
-// Modal
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-backdrop').forEach(m=>{
   m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
 });
 
-// API
 async function api(path,method='GET',body=null){
   const opts={method,headers:{'Content-Type':'application/json'}};
   if(body) opts.body=JSON.stringify(body);
@@ -484,7 +506,6 @@ async function api(path,method='GET',body=null){
   return r.json();
 }
 
-// Fetch all
 async function refreshAll(){
   try{
     const [trains,opTrains,incidents,announcements,ads,timetable]=await Promise.all([
@@ -504,32 +525,27 @@ async function refreshAll(){
 }
 
 function renderAll(){
-  renderDashboard();
-  renderTrains();
-  renderOperators();
-  renderTimetable();
-  renderIncidents();
-  renderAnnouncements();
-  renderAds();
+  renderDashboard();renderTrains();renderOperators();
+  renderTimetable();renderIncidents();renderAnnouncements();renderAds();
 }
 
 // Dashboard
 function renderDashboard(){
-  document.getElementById('stat-trains').textContent = state.trains.filter(t=>t.connected).length;
-  document.getElementById('stat-incidents').textContent = state.incidents.length;
-  document.getElementById('stat-ann').textContent = state.announcements.length;
-  document.getElementById('stat-ads').textContent = state.ads.filter(a=>a.active).length;
+  document.getElementById('stat-trains').textContent=state.trains.filter(t=>t.connected).length;
+  document.getElementById('stat-incidents').textContent=state.incidents.length;
+  document.getElementById('stat-ann').textContent=state.announcements.length;
+  document.getElementById('stat-ads').textContent=state.ads.filter(a=>a.active).length;
   const cont=document.getElementById('route-strips-container');
   cont.innerHTML='';
   ['A','E','K'].forEach(rk=>{
     const route=ROUTES[rk];
     const dirs=rk==='K'?['ST']:['EB','WB'];
-    const desc=rk==='A'?'Union Station ↔ Santa Mooica':rk==='E'?'Union Station ↔ Table Central':' Union Station ↔ Asian Town';
+    const desc=rk==='A'?'Union Station ↔ Santa Mooica':rk==='E'?'Union Station ↔ Table Central':'Union Station ↔ Asian Town';
     cont.innerHTML+=`<div class="route-strip">
       <div class="route-strip-header">
         <div class="route-line-dot" style="background:${route.color}"></div>
         <span style="color:${route.color}">${route.label}</span>
-        <span class="text-muted" style="font-weight:400;font-size:11px;">${desc}</span>
+        <span class="text-muted" style="font-weight:400;font-size:11px">${desc}</span>
         <span style="margin-left:auto;font-size:10px;color:var(--muted)">${LINE_PLATFORM[rk]}</span>
       </div>
       ${dirs.map(dir=>renderTrackStrip(rk,dir,route)).join('')}
@@ -539,27 +555,22 @@ function renderDashboard(){
 
 function renderTrackStrip(rk,dir,route){
   const blocks=route[dir];
-  const stations=route.stations;
-  const trainsOnTrack=state.trains.filter(t=>{
-    const tr=getRoute(t.number);
-    const td=getDirection(t.number);
-    return tr===rk && (rk==='K'||td===dir);
-  });
+  const trainsOnTrack=state.trains.filter(t=>getRoute(t.number)===rk&&(rk==='K'||getDirection(t.number)===dir));
   const cells=blocks.map(b=>{
-    const isStn=!!stations[b];
-    const code=stations[b];
+    const isStn=!!route.stations[b];
+    const code=route.stations[b];
     const train=trainsOnTrack.find(t=>t.location===b);
     return `<div class="block-seg">
       <div class="block-cell ${isStn?'station':''}" style="${isStn?`border-color:${route.color};color:${route.color}`:''}">
         ${train?`<div class="train-dot" style="background:${route.color}"></div>`:''}
       </div>
       <div class="block-label ${isStn?'station':''}" style="${isStn?`color:${route.color}`:''}">
-        ${isStn?code:b.replace(/[A-Z]+0*/,'').replace(/^0+/,'')||b}
+        ${isStn?code:b.replace(/[A-Z_]+/,'').replace(/^0+/,'')||b.slice(-3)}
       </div>
     </div>`;
   });
   return `<div style="margin-bottom:6px;">
-    <div style="font-size:9px;color:var(--muted);margin-bottom:4px;letter-spacing:.8px;">${dir==='ST'?'BIDIRECTIONAL':dir==='EB'?'EASTBOUND →':'← WESTBOUND'}</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:4px;letter-spacing:.8px">${dir==='ST'?'BIDIRECTIONAL':dir==='EB'?'EASTBOUND →':'← WESTBOUND'}</div>
     <div class="block-track">${cells.join('<div class="connector"></div>')}</div>
   </div>`;
 }
@@ -572,75 +583,82 @@ function renderTrains(){
   if(trainPage>=pages) trainPage=pages-1;
   const slice=state.trains.slice(trainPage*TRAINS_PER_PAGE,(trainPage+1)*TRAINS_PER_PAGE);
   document.getElementById('trains-count').textContent=`${total} train${total!==1?'s':''}`;
-
-  if(!total){tbody.innerHTML='<tr><td colspan="7" class="empty-state">No trains in database</td></tr>';
-    document.getElementById('trains-pagination').innerHTML='';return;}
-
+  if(!total){
+    tbody.innerHTML='<tr><td colspan="7" class="empty-state">No trains in database</td></tr>';
+    document.getElementById('trains-pagination').innerHTML='';return;
+  }
   tbody.innerHTML=slice.map(t=>{
-    const rk=getRoute(t.number)||'?';
+    const rk=getRoute(t.number);
     const dir=getDirection(t.number);
-    const platform=LINE_PLATFORM[rk]||'—';
-    const lineLabel=LINE_LABELS[rk]||rk+' Line';
-    const pillClass=`pill-${['A','E','K'].includes(rk)?rk:'op'}`;
+    const platform=rk?LINE_PLATFORM[rk]:'—';
+    const lineLabel=rk?LINE_LABELS[rk]:(t.route||t.number);
+    const pillCls=rk?`pill-${rk}`:'pill-op';
     return `<tr>
       <td><strong>${t.number}</strong></td>
-      <td><span class="pill ${pillClass}">${lineLabel}</span></td>
-      <td style="color:var(--muted)">${platform}</td>
+      <td><span class="pill ${pillCls}">${lineLabel}</span></td>
+      <td class="text-muted">${platform}</td>
       <td><code style="font-size:12px;color:var(--muted)">${t.location||'—'}</code></td>
-      <td class="text-muted">${dir==='EB'?'Eastbound':dir==='WB'?'Westbound':'Bidirectional'}</td>
+      <td class="text-muted">${dir==='EB'?'Eastbound':dir==='WB'?'Westbound':'—'}</td>
       <td class="${t.connected?'badge-connected':'badge-disconnected'}">${t.connected?'● Connected':'○ Offline'}</td>
       <td class="text-muted">${t.coupled_with||'—'}</td>
     </tr>`;
   }).join('');
-
-  // Pagination controls
   const pag=document.getElementById('trains-pagination');
   if(pages<=1){pag.innerHTML='';return;}
   let btns='';
-  for(let i=0;i<pages;i++){
-    btns+=`<button class="page-btn${i===trainPage?' active':''}" onclick="trainPage=${i};renderTrains()">${i+1}</button>`;
-  }
+  for(let i=0;i<pages;i++) btns+=`<button class="page-btn${i===trainPage?' active':''}" onclick="trainPage=${i};renderTrains()">${i+1}</button>`;
   pag.innerHTML=btns+`<span class="page-info">Page ${trainPage+1} of ${pages}</span>`;
 }
 
-// Operators — free form display
+// Operators
 function renderOperators(){
   const tbody=document.getElementById('ops-tbody');
-  if(!state.opTrains.length){tbody.innerHTML='<tr><td colspan="6" class="empty-state">No operator trains added</td></tr>';return;}
-  tbody.innerHTML=state.opTrains.map(t=>`<tr>
-    <td><strong>${t.operator||'—'}</strong></td>
-    <td>${t.train_number||'—'}</td>
-    <td class="text-muted">${t.route||'—'}</td>
-    <td class="text-muted">${t.location||'—'}</td>
-    <td><span class="pill pill-${t.connected?'info':'op'}">${t.connected?'Active':'Inactive'}</span></td>
-    <td><button class="btn btn-danger btn-sm" onclick="deleteOp(${t.id})">Remove</button></td>
-  </tr>`).join('');
+  if(!state.opTrains.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">No operator trains added</td></tr>';return;}
+  tbody.innerHTML=state.opTrains.map(t=>{
+    const parts=(t.location||'').split(' — ');
+    const platform=parts[0]||'—';
+    const track=parts[1]||'—';
+    return `<tr>
+      <td><strong>${t.operator||'—'}</strong></td>
+      <td>${t.train_number||'—'}</td>
+      <td class="text-muted">${t.route||'—'}</td>
+      <td class="text-muted">${platform}${track!=='—'?`<br><span style="font-size:11px;color:var(--muted)">${track}</span>`:''}</td>
+      <td class="text-muted">${t.coupled_with||'—'}</td>
+      <td class="text-muted">${t.direction||'—'} min</td>
+      <td><span class="pill ${t.connected?'pill-info':'pill-op'}">${t.connected?'Active':'Inactive'}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteOp(${t.id})">Remove</button></td>
+    </tr>`;
+  }).join('');
 }
 
 // Timetable
 function renderTimetable(){
   const tbody=document.getElementById('tt-tbody');
   if(!state.timetable.length){tbody.innerHTML='<tr><td colspan="8" class="empty-state">No timetable entries</td></tr>';return;}
-  tbody.innerHTML=state.timetable.map(t=>`<tr>
-    <td><span class="pill pill-${t.route}">${t.route} Line</span></td>
-    <td class="text-muted">${t.direction}</td>
-    <td>${STATION_NAMES[t.origin]||t.origin}</td>
-    <td>${STATION_NAMES[t.destination]||t.destination}</td>
-    <td><strong>${t.departs}</strong></td>
-    <td class="text-muted" style="font-size:11px">${t.days}</td>
-    <td class="${t.active?'badge-connected':'badge-disconnected'}">${t.active?'Active':'Inactive'}</td>
-    <td style="display:flex;gap:6px">
-      <button class="btn btn-ghost btn-sm" onclick="toggleTT(${t.id},${t.active})">${t.active?'Disable':'Enable'}</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteTT(${t.id})">×</button>
-    </td>
-  </tr>`).join('');
+  tbody.innerHTML=state.timetable.map(t=>{
+    const rk=['A','E','K'].includes(t.route)?t.route:null;
+    const pillCls=rk?`pill-${rk}`:'pill-op';
+    const lineLabel=rk?LINE_LABELS[rk]:(t.route||'Custom');
+    return `<tr>
+      <td><span class="pill ${pillCls}">${lineLabel}</span></td>
+      <td class="text-muted">${t.direction||'—'}</td>
+      <td>${STATION_NAMES[t.origin]||t.origin}</td>
+      <td>${STATION_NAMES[t.destination]||t.destination}</td>
+      <td><strong>${t.departs}</strong></td>
+      <td class="text-muted" style="font-size:11px">${t.days}</td>
+      <td class="${t.active?'badge-connected':'badge-disconnected'}">${t.active?'Active':'Inactive'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="toggleTT(${t.id},${t.active})">${t.active?'Disable':'Enable'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTT(${t.id})">×</button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 // Incidents
 function renderIncidents(){
   const tbody=document.getElementById('inc-tbody');
   if(!state.incidents.length){tbody.innerHTML='<tr><td colspan="6" class="empty-state">No active incidents</td></tr>';return;}
-  const colors={info:'var(--a)',warning:'var(--yellow)',critical:'var(--red)'};
   tbody.innerHTML=state.incidents.map(i=>`<tr>
     <td><span class="pill pill-${i.severity}">${i.severity.toUpperCase()}</span></td>
     <td>${i.route?`<span class="pill pill-${i.route}">${i.route} Line</span>`:'<span class="text-muted">All</span>'}</td>
@@ -651,13 +669,73 @@ function renderIncidents(){
   </tr>`).join('');
 }
 
+// ── Service Status Panel ──────────────────────────────────────
+const STATUS_OPTIONS=[
+  {value:'good',   label:'Good Service', color:'#3dd68c'},
+  {value:'minor',  label:'Minor Delays', color:'#f5c842'},
+  {value:'major',  label:'Major Delays', color:'#E8823A'},
+  {value:'suspended',label:'Suspended',  color:'#e05c5c'},
+  {value:'custom', label:'Custom…',      color:'#a07fff'},
+];
+
+function renderStatusPanel(){
+  const cont=document.getElementById('status-cards');
+  cont.innerHTML=['A','E','K'].map(rk=>{
+    const cur=serviceStatus[rk];
+    const opt=STATUS_OPTIONS.find(o=>o.value===cur.status)||STATUS_OPTIONS[0];
+    return `<div class="status-card">
+      <div class="status-card-header">
+        <div style="width:28px;height:28px;border-radius:50%;background:${LINE_COLORS[rk]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff">${rk}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700">${LINE_LABELS[rk]}</div>
+          <div style="font-size:11px;color:var(--muted)">${LINE_PLATFORM[rk]}</div>
+        </div>
+      </div>
+      <select class="status-select" id="ss-select-${rk}" onchange="updateServiceStatus('${rk}')">
+        ${STATUS_OPTIONS.map(o=>`<option value="${o.value}"${cur.status===o.value?' selected':''}>${o.label}</option>`).join('')}
+      </select>
+      <input class="status-input" id="ss-msg-${rk}" placeholder="Custom message (optional)"
+        value="${cur.message||''}" oninput="updateServiceStatus('${rk}')"
+        style="${cur.status!=='custom'?'display:none':''}">
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${opt.color}"></div>
+        <span style="font-size:11px;color:${opt.color};font-weight:600" id="ss-label-${rk}">${opt.label}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Also show incidents list
+  const inc=document.getElementById('status-inc-tbody');
+  if(!state.incidents.length){inc.innerHTML='<tr><td colspan="4" class="empty-state">No active incidents</td></tr>';return;}
+  inc.innerHTML=state.incidents.map(i=>`<tr>
+    <td><span class="pill pill-${i.severity}">${i.severity.toUpperCase()}</span></td>
+    <td>${i.route?`<span class="pill pill-${i.route}">${i.route} Line</span>`:'All'}</td>
+    <td><strong>${i.title}</strong></td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteInc(${i.id});renderStatusPanel()">Resolve</button></td>
+  </tr>`).join('');
+}
+
+function updateServiceStatus(rk){
+  const sel=document.getElementById(`ss-select-${rk}`);
+  const msg=document.getElementById(`ss-msg-${rk}`);
+  const lbl=document.getElementById(`ss-label-${rk}`);
+  serviceStatus[rk].status=sel.value;
+  serviceStatus[rk].message=msg?.value||'';
+  msg.style.display=sel.value==='custom'?'':'none';
+  const opt=STATUS_OPTIONS.find(o=>o.value===sel.value)||STATUS_OPTIONS[0];
+  lbl.textContent=sel.value==='custom'?(msg.value||'Custom'):opt.label;
+  lbl.style.color=opt.color;
+  // Dot
+  lbl.previousElementSibling.style.background=opt.color;
+  toast(`${LINE_LABELS[rk]} status updated`);
+}
+
 // Announcements
 function renderAnnouncements(){
   const tbody=document.getElementById('ann-tbody');
   if(!state.announcements.length){tbody.innerHTML='<tr><td colspan="4" class="empty-state">No active announcements</td></tr>';return;}
   tbody.innerHTML=state.announcements.map(a=>`<tr>
-    <td>${a.message}</td>
-    <td class="text-muted">${a.priority}</td>
+    <td>${a.message}</td><td class="text-muted">${a.priority}</td>
     <td class="text-muted" style="font-size:11px">${a.expires_at||'Never'}</td>
     <td><button class="btn btn-danger btn-sm" onclick="deleteAnn(${a.id})">×</button></td>
   </tr>`).join('');
@@ -666,10 +744,11 @@ function renderAnnouncements(){
 // Ads
 function renderAds(){
   const tbody=document.getElementById('ads-tbody');
-  if(!state.ads.length){tbody.innerHTML='<tr><td colspan="5" class="empty-state">No ads configured</td></tr>';return;}
+  if(!state.ads.length){tbody.innerHTML='<tr><td colspan="6" class="empty-state">No ads configured</td></tr>';return;}
   tbody.innerHTML=state.ads.map(a=>`<tr>
     <td><strong>${a.title}</strong></td>
-    <td class="text-muted" style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.body}</td>
+    <td class="text-muted" style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.body}</td>
+    <td>${a.image_url?`<img src="${a.image_url}" style="height:32px;width:48px;object-fit:cover;border-radius:4px;border:1px solid var(--border)">`:' <span class="text-muted">None</span>'}</td>
     <td>${a.duration_s}s</td>
     <td class="${a.active?'badge-connected':'badge-disconnected'}">${a.active?'Active':'Inactive'}</td>
     <td style="display:flex;gap:6px">
@@ -679,14 +758,13 @@ function renderAds(){
   </tr>`).join('');
 }
 
-// ── Display Preview ──
+// ── Display Preview ───────────────────────────────────────────
 function buildScreenList(){
-  const screens=[
-    {label:'Arrivals — Page 1',render:()=>renderArrivalsScreen(0)},
-  ];
-  const allTrains=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
-  if(allTrains.length>4) screens.push({label:'Arrivals — Page 2',render:()=>renderArrivalsScreen(1)});
-  screens.push({label:'Service Status',render:renderStatusScreen});
+  const all=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
+  const pages=Math.ceil(all.length/4)||1;
+  const screens=[];
+  for(let p=0;p<pages;p++) screens.push({label:`Arrivals${pages>1?` — Page ${p+1}`:''}`,render:()=>renderArrivalsScreen(p)});
+  screens.push({label:'Service Status',render:renderStatusScreenPreview});
   if(state.ads.filter(a=>a.active).length) screens.push({label:'Advertisement',render:renderAdScreen});
   return screens;
 }
@@ -694,109 +772,110 @@ function buildScreenList(){
 function renderDisplayPreview(){
   const screens=buildScreenList();
   const idx=currentScreen%screens.length;
-  const screen=screens[idx];
-  document.getElementById('screenLabel').textContent=`${screen.label} (${idx+1}/${screens.length})`;
-  document.getElementById('displayPreview').innerHTML=screen.render();
-
+  document.getElementById('screenLabel').textContent=`${screens[idx].label} (${idx+1}/${screens.length})`;
+  document.getElementById('displayPreview').innerHTML=screens[idx].render();
   const list=document.getElementById('rotation-list');
   list.innerHTML=screens.map((s,i)=>`
     <div style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:${i===idx?'var(--surface2)':'var(--surface)'};cursor:pointer;display:flex;align-items:center;gap:10px" onclick="currentScreen=${i};renderDisplayPreview()">
       <div style="width:6px;height:6px;border-radius:50%;background:${i===idx?'var(--a)':'var(--border)'}"></div>
-      <span style="font-size:12px;font-weight:${i===idx?'600':'400'}">${s.label}</span>
+      <span style="font-size:12px;font-weight:${i===idx?600:400}">${s.label}</span>
       ${i===idx?'<span style="margin-left:auto;font-size:10px;color:var(--a)">SHOWING</span>':''}
     </div>`).join('');
 }
-
 function prevScreen(){const s=buildScreenList();currentScreen=(currentScreen-1+s.length)%s.length;renderDisplayPreview();}
 function nextScreen(){const s=buildScreenList();currentScreen=(currentScreen+1)%s.length;renderDisplayPreview();}
 
 function renderArrivalsScreen(page=0){
-  const allTrains=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
-  const slice=allTrains.slice(page*4,(page+1)*4);
+  const all=[...state.trains,...state.opTrains.map(o=>({...o,number:o.train_number,_isOp:true}))];
+  const slice=all.slice(page*4,(page+1)*4);
   const ann=state.announcements[0];
   const now=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-
+  const totalPages=Math.ceil(all.length/4);
   return `<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">
     <div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">
-      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span style="font-size:8px;font-weight:900;color:#000">m</span>
-      </div>
+      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>
       <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px">CITY METRO</span>
       <span style="color:#888;font-size:7px;margin-left:2px">Union Station</span>
-      ${allTrains.length>4?`<span style="margin-left:4px;font-size:7px;color:#555">pg ${page+1}</span>`:''}
+      ${totalPages>1?`<span style="font-size:7px;color:#555;margin-left:4px">pg ${page+1}/${totalPages}</span>`:''}
       <span style="color:#fff;font-size:9px;font-weight:700;margin-left:auto">${now}</span>
     </div>
     ${ann?`<div style="background:#1a1000;padding:3px 8px;font-size:7px;color:#f5c842;border-bottom:1px solid #2a2000;">📢 ${ann.message}</div>`:''}
-    <div style="padding:3px 8px;display:flex;gap:4px;border-bottom:1px solid #1a1a1a;">
-      <span style="color:#555;font-size:6px;font-weight:700;letter-spacing:.8px;width:52px">LINE</span>
-      <span style="color:#555;font-size:6px;font-weight:700;letter-spacing:.8px;flex:1">DESTINATION</span>
-      <span style="color:#555;font-size:6px;font-weight:700;letter-spacing:.8px;width:32px">PLT</span>
-      <span style="color:#555;font-size:6px;font-weight:700;letter-spacing:.8px;width:24px">DUE</span>
-      <span style="color:#555;font-size:6px;font-weight:700;letter-spacing:.8px;width:30px">STATUS</span>
+    <div style="padding:3px 8px;display:flex;gap:3px;border-bottom:1px solid #1a1a1a;">
+      <span style="color:#555;font-size:6px;font-weight:700;width:54px">LINE</span>
+      <span style="color:#555;font-size:6px;font-weight:700;flex:1">DESTINATION</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:36px">PLT</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:22px">DUE</span>
+      <span style="color:#555;font-size:6px;font-weight:700;width:32px">STATUS</span>
     </div>
     ${slice.length?slice.map((t,i)=>{
       const isOp=t._isOp;
       const rk=isOp?null:getRoute(t.number);
       const color=rk?LINE_COLORS[rk]:'#a07fff';
-      const label=isOp?(t.operator||'Guest'):(LINE_LABELS[rk]||rk+' Line');
-      const platform=isOp?(t.location||'—'):(LINE_PLATFORM[rk]||'—');
-
-      // For City Metro trains, compute next station
-      let dest='—', etaMin=0;
-      if(!isOp && rk){
-        const dir=getDirection(t.number);
-        const track=ROUTES[rk]?.[dir]||ROUTES[rk]?.ST||[];
-        const idx2=track.indexOf(t.location);
-        const nextStn=idx2>=0?track.slice(idx2+1).find(b=>ROUTES[rk].stations?.[b]):null;
-        dest=nextStn?STATION_NAMES[ROUTES[rk].stations[nextStn]]||ROUTES[rk].stations[nextStn]:'Terminus';
-        const blocksAway=nextStn?track.indexOf(nextStn)-idx2:0;
-        etaMin=Math.round(blocksAway*30/60);
-      } else if(isOp){
+      const label=rk?LINE_LABELS[rk]:(t.operator||'Guest');
+      let platform,dest,etaMin,status;
+      if(isOp){
+        const pts=(t.location||'').split(' — ');
+        platform=pts[0]||'—';
         dest=t.route||'—';
-        etaMin=parseInt(t.direction)||0; // we store eta in direction field for ops
+        etaMin=parseInt(t.direction)||0;
+        status=t.coupled_with||'On Time';
+      } else {
+        platform=rk?LINE_PLATFORM[rk]:'—';
+        const dir=getDirection(t.number);
+        const track=rk?(ROUTES[rk][dir]||ROUTES[rk].ST||[]):[];
+        const idx2=track.indexOf(t.location);
+        const nextStn=idx2>=0?track.slice(idx2+1).find(b=>ROUTES[rk].stations[b]):null;
+        dest=nextStn?(STATION_NAMES[ROUTES[rk].stations[nextStn]]||ROUTES[rk].stations[nextStn]):'Terminus';
+        etaMin=nextStn?Math.round((track.indexOf(nextStn)-idx2)*30/60):0;
+        status='On Time';
       }
-
-      return `<div style="display:flex;gap:4px;align-items:center;padding:5px 8px;background:${i%2?'#0a0a0a':'#000'}">
-        <div style="background:${color}22;border:1px solid ${color};border-radius:3px;width:52px;padding:2px 3px;text-align:center;font-size:6px;font-weight:700;color:${color};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</div>
-        <span style="color:#ddd;font-size:8px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dest}</span>
-        <span style="color:#888;font-size:7px;width:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${platform}</span>
-        <span style="color:${etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:24px">${isOp?'—':etaMin===0?'NOW':etaMin+'m'}</span>
-        <span style="font-size:6px;width:30px;color:var(--green)">${isOp?(t.coupled_with||'On Time'):'On Time'}</span>
+      const statusColor=status==='Delayed'?'#f5c842':status==='Cancelled'?'#e05c5c':status==='Boarding'?'#4A90D9':'#3dd68c';
+      return `<div style="display:flex;gap:3px;align-items:center;padding:5px 8px;background:${i%2?'#0a0a0a':'#000'}">
+        <div style="background:${color}22;border:1px solid ${color};border-radius:3px;width:54px;padding:2px 3px;text-align:center;font-size:5.5px;font-weight:700;color:${color};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</div>
+        <span style="color:#ddd;font-size:7.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${dest}</span>
+        <span style="color:#888;font-size:7px;width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${platform}</span>
+        <span style="color:${etaMin<=2?'#f90':'#fff'};font-size:9px;font-weight:700;width:22px">${isOp?(etaMin?etaMin+'m':'—'):etaMin===0?'NOW':etaMin+'m'}</span>
+        <span style="font-size:6px;width:32px;color:${statusColor};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${status}</span>
       </div>`;
-    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains on this page</div>`}
+    }).join(''):`<div style="color:#333;font-size:9px;text-align:center;padding:20px;">No trains</div>`}
     <div style="margin-top:auto;background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Updated ${new Date().toLocaleTimeString('en-GB')}</div>
   </div>`;
 }
 
-function renderStatusScreen(){
-  const colors={info:'#4A90D9',warning:'#f5c842',critical:'#e05c5c'};
+function renderStatusScreenPreview(){
+  const statusColors={good:'#3dd68c',minor:'#f5c842',major:'#E8823A',suspended:'#e05c5c',custom:'#a07fff'};
+  const statusLabels={good:'Good Service',minor:'Minor Delays',major:'Major Delays',suspended:'Suspended',custom:'Custom'};
   return `<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">
     <div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">
-      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center">
-        <span style="font-size:8px;font-weight:900;color:#000">m</span>
-      </div>
+      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>
       <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px">SERVICE STATUS</span>
     </div>
     ${['A','E','K'].map(rk=>{
-      const lineIncs=state.incidents.filter(i=>!i.route||i.route===rk);
-      const status=lineIncs[0]||null;
-      const color=LINE_COLORS[rk];
+      const ss=serviceStatus[rk];
+      // Fall back to incident if no override
+      const inc=state.incidents.find(i=>!i.route||i.route===rk);
+      const useInc=ss.status==='good'&&inc;
+      const color=useInc?{info:'#4A90D9',warning:'#f5c842',critical:'#e05c5c'}[inc.severity]:statusColors[ss.status];
+      const label=useInc?inc.title:(ss.status==='custom'?(ss.message||'Custom'):statusLabels[ss.status]);
       return `<div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid #111">
-        <div style="width:22px;height:22px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;flex-shrink:0">${rk}</div>
+        <div style="width:22px;height:22px;border-radius:50%;background:${LINE_COLORS[rk]};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;flex-shrink:0">${rk}</div>
         <div style="flex:1">
           <div style="color:#fff;font-size:8px;font-weight:700">${LINE_LABELS[rk]} — ${LINE_PLATFORM[rk]}</div>
-          <div style="font-size:7px;color:${status?colors[status.severity]:'#3dd68c'}">${status?status.title:'Good Service'}</div>
+          <div style="font-size:7px;color:${color}">${label}</div>
         </div>
-        <div style="width:6px;height:6px;border-radius:50%;background:${status?colors[status.severity]:'#3dd68c'}"></div>
+        <div style="width:6px;height:6px;border-radius:50%;background:${color}"></div>
       </div>`;
     }).join('')}
     ${state.incidents.length?`<div style="padding:6px 8px">
-      <div style="font-size:7px;color:#888;margin-bottom:4px;letter-spacing:.8px">ACTIVE INCIDENTS</div>
-      ${state.incidents.slice(0,2).map(i=>`<div style="padding:5px;border-radius:4px;border-left:2px solid ${colors[i.severity]||'#4A90D9'};background:#0a0a0a;margin-bottom:4px">
-        <div style="font-size:8px;font-weight:700;color:#fff">${i.title}</div>
-        <div style="font-size:7px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${i.body}</div>
-      </div>`).join('')}
-    </div>`:`<div style="padding:16px 8px;text-align:center;color:#3dd68c;font-size:9px;font-weight:700">✓ All Services Running Normally</div>`}
+      <div style="font-size:7px;color:#888;margin-bottom:4px;letter-spacing:.8px">INCIDENTS</div>
+      ${state.incidents.slice(0,2).map(i=>{
+        const c={info:'#4A90D9',warning:'#f5c842',critical:'#e05c5c'}[i.severity];
+        return `<div style="padding:5px;border-radius:4px;border-left:2px solid ${c};background:#0a0a0a;margin-bottom:4px">
+          <div style="font-size:8px;font-weight:700;color:#fff">${i.title}</div>
+          <div style="font-size:7px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${i.body}</div>
+        </div>`;
+      }).join('')}
+    </div>`:`<div style="padding:12px 8px;text-align:center;color:#3dd68c;font-size:9px;font-weight:700">✓ All Services Running Normally</div>`}
   </div>`;
 }
 
@@ -805,31 +884,39 @@ function renderAdScreen(){
   if(!ad) return `<div style="background:#000;height:100%;display:flex;align-items:center;justify-content:center;color:#333;font-size:10px;font-family:Helvetica">No active ads</div>`;
   return `<div style="background:#000;height:100%;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;">
     <div style="background:#111;padding:5px 8px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #222;">
-      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center">
-        <span style="font-size:8px;font-weight:900;color:#000">m</span>
-      </div>
+      <div style="width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#000">m</span></div>
       <span style="color:#888;font-size:7px;letter-spacing:.5px">ADVERTISEMENT</span>
     </div>
-    ${ad.image_url?`<div style="height:80px;overflow:hidden"><img src="${ad.image_url}" style="width:100%;height:100%;object-fit:cover"></div>`:''}
-    <div style="padding:12px 10px;flex:1;display:flex;flex-direction:column;justify-content:center">
-      <div style="color:#fff;font-size:12px;font-weight:700;margin-bottom:6px">${ad.title}</div>
-      <div style="color:#aaa;font-size:9px;line-height:1.4">${ad.body}</div>
+    ${ad.image_url?`<div style="height:90px;overflow:hidden;flex-shrink:0"><img src="${ad.image_url}" style="width:100%;height:100%;object-fit:cover;object-position:center" loading="lazy"></div>`:''}
+    <div style="padding:10px;flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden">
+      <div style="color:#fff;font-size:11px;font-weight:700;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ad.title}</div>
+      <div style="color:#aaa;font-size:8px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical">${ad.body}</div>
     </div>
-    <div style="background:#0a0a14;padding:3px 8px;font-size:6px;color:#333">Shown for ${ad.duration_s}s</div>
+    <div style="background:#0a0a14;padding:3px 8px;font-size:6px;color:#333;flex-shrink:0">Shown for ${ad.duration_s}s</div>
   </div>`;
+}
+
+// Timetable type toggle
+function toggleTTFields(){
+  const type=document.getElementById('tt-type').value;
+  const metro=document.getElementById('tt-metro-fields');
+  const custom=document.getElementById('tt-custom-fields');
+  if(type==='metro'){
+    metro.style.display='contents';custom.style.display='none';
+  } else {
+    metro.style.display='none';custom.style.display='grid-column: 1 / -1';
+    custom.style.display='block';
+  }
 }
 
 // CRUD
 async function addOperatorTrain(){
-  // Store free-form fields: operator, train_number in their columns
-  // service name → route column, platform/track → location column, eta → direction, status → coupled_with
   const body={
-    operator:v('op-operator'),
-    train_number:v('op-number'),
-    route:v('op-service'),       // service name stored in route
-    location:v('op-platform')+' — '+v('op-track'), // platform + track in location
-    direction:v('op-eta'),       // eta stored in direction
-    coupled_with:v('op-status'), // status stored in coupled_with — handled in worker
+    operator:v('op-operator'),train_number:v('op-number'),
+    route:v('op-service'),
+    location:v('op-platform')+(v('op-track')?' — '+v('op-track'):''),
+    direction:v('op-eta'),
+    coupled_with:v('op-status'),
     connected:1
   };
   if(!body.operator||!body.train_number){toast('Operator name and train number required','error');return;}
@@ -839,8 +926,15 @@ async function addOperatorTrain(){
 async function deleteOp(id){await api(`/operator-trains/${id}`,'DELETE');toast('Removed');refreshAll();}
 
 async function addTimetable(){
-  const body={route:v('tt-route'),direction:v('tt-dir'),origin:v('tt-origin'),destination:v('tt-dest'),departs:v('tt-departs'),days:v('tt-days')};
-  if(!body.origin||!body.destination||!body.departs){toast('Fill all fields','error');return;}
+  const type=document.getElementById('tt-type').value;
+  let route,direction;
+  if(type==='metro'){
+    route=v('tt-route');direction=v('tt-dir');
+  } else {
+    route=v('tt-custom-line');direction=v('tt-custom-dir');
+  }
+  const body={route,direction,origin:v('tt-origin'),destination:v('tt-dest'),departs:v('tt-departs'),days:v('tt-days')||'Mon,Tue,Wed,Thu,Fri,Sat,Sun'};
+  if(!body.origin||!body.destination||!body.departs){toast('Fill origin, destination and departs','error');return;}
   await api('/timetable','POST',body);closeModal('modal-add-tt');toast('Service added');refreshAll();
 }
 async function toggleTT(id,active){await api(`/timetable/${id}`,'PUT',{active:active?0:1});refreshAll();}
@@ -870,9 +964,7 @@ async function deleteAd(id){await api(`/ads/${id}`,'DELETE');toast('Deleted');re
 
 function v(id){return document.getElementById(id)?.value?.trim()||'';}
 
-// Auto-rotate display preview
 setInterval(()=>{if(document.getElementById('panel-display').classList.contains('active')){nextScreen();}},37000);
-
 refreshAll();
 setInterval(refreshAll,15000);
 </script>
